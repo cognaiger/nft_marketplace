@@ -16,5 +16,7 @@ import Slider from "./Slider/Slider";
 import Brand from "./Brand/Brand";
 import Video from "./Video/Video";
 
-export { Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Subscribe, Title, Category, Filter, NFTCard, Collection, AudioLive, FollowerTab, 
-    Slider, Brand, Video };
+export {
+    Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Subscribe, Title, Category, Filter, NFTCard, Collection, AudioLive, FollowerTab,
+    Slider, Brand, Video
+};
