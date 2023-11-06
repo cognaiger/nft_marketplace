@@ -25,7 +25,6 @@ const collection = () => {
             <NFTCardTwo NFTData={collectionArray} />
 
             <Slider />
-            <Brand />
         </div>
     );
 };
