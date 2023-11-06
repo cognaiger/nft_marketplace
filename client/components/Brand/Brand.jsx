@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Style from "./Brand.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex.js";

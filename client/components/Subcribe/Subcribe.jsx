@@ -1,6 +1,6 @@
 import React from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Style from "./Subcribe.module.css";
 import images from "../../img";
 

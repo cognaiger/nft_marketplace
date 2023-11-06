@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from "./Footer.module.css";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import {
   TiSocialFacebook,
   TiSocialLinkedin,
