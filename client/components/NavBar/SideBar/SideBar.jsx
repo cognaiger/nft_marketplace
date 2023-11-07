@@ -9,7 +9,6 @@ import {
     TiSocialYoutube,
     TiSocialInstagram,
     TiArrowSortedDown,
-    TiArrowSortedUp,
 } from "react-icons/ti";
 import Style from "./SideBar.module.css";
 import images from "../../../img";
@@ -19,7 +18,6 @@ const SideBar = () => {
     const [openDiscover, setOpenDiscover] = useState(false);
     const [openHelp, setOpenHelp] = useState(false);
 
-    //--------DISCOVER NAVIGATION MENU
     const discover = [
         {
             name: "Collection",
@@ -50,7 +48,7 @@ const SideBar = () => {
             link: "blog",
         },
     ];
-    //------HELP CNTEER
+
     const helpCenter = [
         {
             name: "About",

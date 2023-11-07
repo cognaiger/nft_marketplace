@@ -1,11 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/legacy/image";
-import Link from "next/link";
 import { MdNotifications } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
-import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
+import { CgMenuRight } from "react-icons/cg";
 import Style from "./NavBar.module.css";
 import { Discover, HelpCenter, Notification, Profile, SideBar } from "./index";
 import { Button } from "../componentsindex";
@@ -16,18 +15,17 @@ const NavBar = () => {
     const [help, setHelp] = useState(false);
     const [notification, setNotification] = useState(false);
     const [profile, setProfile] = useState(false);
-    const [openSideMenu, setOpenSideMenu] = useState(false);
 
     const openMenu = (e) => {
         const btnText = e.target.innerText;
         if (btnText == "Discover") {
-            setDiscover(true);
+            setDiscover(!discover);
             setHelp(false);
             setNotification(false);
             setProfile(false);
         } else if (btnText == "Help Center") {
             setDiscover(false);
-            setHelp(true);
+            setHelp(!help);
             setNotification(false);
             setProfile(false);
         } else {
@@ -57,14 +55,6 @@ const NavBar = () => {
             setNotification(false);
         } else {
             setProfile(false);
-        }
-    };
-
-    const openSideBar = () => {
-        if (!openSideMenu) {
-            setOpenSideMenu(true);
-        } else {
-            setOpenSideMenu(false);
         }
     };
 
@@ -151,13 +141,6 @@ const NavBar = () => {
                     </div>
                 </div>
             </div>
-
-            {/* SIDBAR CPMPONE/NT */}
-            {openSideMenu && (
-                <div className={Style.sideBar}>
-                    <SideBar setOpenSideMenu={setOpenSideMenu} />
-                </div>
-            )}
         </div>
     );
 }
