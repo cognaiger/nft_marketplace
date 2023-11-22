@@ -9,12 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@thirdweb-dev/chains": "^0.1.58",
+    "@thirdweb-dev/react": "^4.1.9",
+    "@thirdweb-dev/sdk": "^4.0.16",
+    "assert": "^2.0.0",
+    "browserify-zlib": "latest",
+    "ethers": "^5.7.2",
     "framer-motion": "^10.16.4",
+    "http": "npm:http-browserify",
+    "http-browserify": "latest",
+    "https": "npm:https-browserify",
+    "https-browserify": "latest",
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "stream": "^0.0.2",
+    "url": "latest",
+    "zlib": "npm:browserify-zlib"
   },
   "devDependencies": {
     "eslint": "^8",

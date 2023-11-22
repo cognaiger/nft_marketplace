@@ -1,6 +1,7 @@
 import React from "react";
 import Style from "../styles/index.module.css";
 import { AudioLive, BigNFTSilder, Brand, Category, Collection, Filter, FollowerTab, HeroSection, NFTCard, Service, Slider, Subscribe, Title, Video } from "../components/componentsindex";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 const Home = () => {
   return (

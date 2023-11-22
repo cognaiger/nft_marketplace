@@ -9,6 +9,7 @@ import Style from "./NavBar.module.css";
 import { Discover, HelpCenter, Notification, Profile, SideBar } from "./index";
 import { Button } from "../componentsindex";
 import images from "../../img";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 const NavBar = () => {
     const [discover, setDiscover] = useState(false);
@@ -113,6 +114,8 @@ const NavBar = () => {
                     <div className={Style.navbar_container_right_button}>
                         <Button btnName="Create" handleClick={() => { }} />
                     </div>
+
+                    <ConnectWallet theme={"dark"} modalSize="wide" />
 
                     {/* USER PROFILE */}
 

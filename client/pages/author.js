@@ -73,8 +73,6 @@ const author = () => {
                     <FollowerTabCard i={i} el={el} />
                 ))}
             </div>
-
-            <Brand />
         </div>
     );
 };
