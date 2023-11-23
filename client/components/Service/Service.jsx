@@ -16,10 +16,9 @@ const Service = () => {
                     <p className={Style.service_box_item_step}>
                         <span>Step 1</span>
                     </p>
-                    <h3>Filter & Discover</h3>
+                    <h3>Connect Wallet</h3>
                     <p>
-                        Connect with wallet, discover, buy NTFs, sell your NFTs and earn
-                        money
+                        Connect your wallet to our application
                     </p>
                 </div>
                 <div className={Style.service_box_item}>
@@ -32,10 +31,9 @@ const Service = () => {
                     <p className={Style.service_box_item_step}>
                         <span>Step 2</span>
                     </p>
-                    <h3>Filter & Discover</h3>
+                    <h3>Discover</h3>
                     <p>
-                        Connect with wallet, discover, buy NTFs, sell your NFTs and earn
-                        money
+                        Discover all NFTs matching your preferences
                     </p>
                 </div>
                 <div className={Style.service_box_item}>
@@ -48,10 +46,9 @@ const Service = () => {
                     <p className={Style.service_box_item_step}>
                         <span>Step 3</span>
                     </p>
-                    <h3>Connect Wallet</h3>
+                    <h3>Buy NFT</h3>
                     <p>
-                        Connect with wallet, discover, buy NTFs, sell your NFTs and earn
-                        money
+                        Buy NTFs just by 1 click
                     </p>
                 </div>
                 <div className={Style.service_box_item}>
@@ -64,10 +61,9 @@ const Service = () => {
                     <p className={Style.service_box_item_step}>
                         <span>Step 4</span>
                     </p>
-                    <h3>Start trading</h3>
+                    <h3>Own and Share</h3>
                     <p>
-                        Connect with wallet, discover, buy NTFs, sell your NFTs and earn
-                        money
+                        Now you possess the NFT, let's make it publicly known
                     </p>
                 </div>
             </div>

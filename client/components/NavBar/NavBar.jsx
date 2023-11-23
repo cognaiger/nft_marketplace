@@ -9,13 +9,15 @@ import Style from "./NavBar.module.css";
 import { Discover, HelpCenter, Notification, Profile, SideBar } from "./index";
 import { Button } from "../componentsindex";
 import images from "../../img";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 const NavBar = () => {
     const [discover, setDiscover] = useState(false);
     const [help, setHelp] = useState(false);
     const [notification, setNotification] = useState(false);
     const [profile, setProfile] = useState(false);
+
+    const address = useAddress();
 
     const openMenu = (e) => {
         const btnText = e.target.innerText;
@@ -118,21 +120,22 @@ const NavBar = () => {
                     <ConnectWallet theme={"dark"} modalSize="wide" />
 
                     {/* USER PROFILE */}
+                    {address && (
+                        <div className={Style.navbar_container_right_profile_box}>
+                            <div className={Style.navbar_container_right_profile}>
+                                <Image
+                                    src={images.user1}
+                                    alt="Profile"
+                                    width={40}
+                                    height={40}
+                                    onClick={() => openProfile()}
+                                    className={Style.navbar_container_right_profile}
+                                />
 
-                    <div className={Style.navbar_container_right_profile_box}>
-                        <div className={Style.navbar_container_right_profile}>
-                            <Image
-                                src={images.user1}
-                                alt="Profile"
-                                width={40}
-                                height={40}
-                                onClick={() => openProfile()}
-                                className={Style.navbar_container_right_profile}
-                            />
-
-                            {profile && <Profile />}
+                                {profile && <Profile />}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {/* MENU BUTTON */}
 
