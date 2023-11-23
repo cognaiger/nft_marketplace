@@ -21,8 +21,19 @@ import Style from "./NFTDescription.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex.js";
 import { NFTTabs } from "../NFTDetailsIndex";
+import { Web3Button, useAddress, useBuyDirectListing, useContract } from "@thirdweb-dev/react";
+import { MARKETPLACE_ADDR } from "../../common/const";
 
-const NFTDescription = () => {
+const NFTDescription = ({ listing }) => {
+    const { contract } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
+    const address = useAddress();
+
+    const buyListing = async () => {
+        const quantity = 1;
+        txnRes = await contract.directListings.buyFromListing(listing.id, quantity, address);
+        return txnRes;
+    }
+
     const [social, setSocial] = useState(false);
     const [NFTMenu, setNFTMenu] = useState(false);
     const [history, setHistory] = useState(true);
@@ -151,7 +162,7 @@ const NFTDescription = () => {
                 </div>
                 {/* //Part TWO */}
                 <div className={Style.NFTDescription_box_profile}>
-                    <h1>BearX #23453</h1>
+                    <h1>{listing.asset.name}</h1>
                     <div className={Style.NFTDescription_box_profile_box}>
                         <div className={Style.NFTDescription_box_profile_box_left}>
                             <Image
@@ -189,7 +200,7 @@ const NFTDescription = () => {
 
                     <div className={Style.NFTDescription_box_profile_biding}>
                         <p>
-                            <MdTimer /> <span>Auction ending in:</span>
+                            <MdTimer /> <span>Listing ending in:</span>
                         </p>
 
                         <div className={Style.NFTDescription_box_profile_biding_box_timer}>
@@ -198,7 +209,7 @@ const NFTDescription = () => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>2</p>
+                                <p>{Math.floor(listing.endTimeInSeconds / 86400)}</p>
                                 <span>Days</span>
                             </div>
                             <div
@@ -206,7 +217,7 @@ const NFTDescription = () => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>22</p>
+                                <p>{Math.floor((listing.endTimeInSeconds % 86400) / 3600)}</p>
                                 <span>hours</span>
                             </div>
                             <div
@@ -214,7 +225,7 @@ const NFTDescription = () => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>45</p>
+                                <p>{Math.floor(((listing.endTimeInSeconds % 86400) % 3600) / 60)}</p>
                                 <span>mins</span>
                             </div>
                             <div
@@ -222,7 +233,7 @@ const NFTDescription = () => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>12</p>
+                                <p>{((listing.endTimeInSeconds % 86400) % 3600) % 60}</p>
                                 <span>secs</span>
                             </div>
                         </div>
@@ -233,16 +244,22 @@ const NFTDescription = () => {
                                     Style.NFTDescription_box_profile_biding_box_price_bid
                                 }
                             >
-                                <small>Current Bid</small>
+                                <small>Price</small>
                                 <p>
-                                    1.000 ETH <span>( ≈ $3,221.22)</span>
+                                    {listing.currencyValuePerToken.displayValue} {listing.currencyValuePerToken.symbol}
                                 </p>
                             </div>
-
-                            <span>[96 in stock]</span>
                         </div>
 
                         <div className={Style.NFTDescription_box_profile_biding_box_button}>
+                            <Web3Button 
+                                contractAddress={MARKETPLACE_ADDR}
+                                action={
+                                    async () => buyListing()
+                                }
+                            >
+                                Buy Now
+                            </Web3Button>
                             <Button
                                 icon=<FaWallet />
                                 btnName="Place a bid"
