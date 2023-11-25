@@ -3,8 +3,16 @@ import Image from "next/legacy/image";
 import Style from "./HeroSection.module.css";
 import { Button } from "../componentsindex";
 import images from "../../img";
+import { useRouter } from "next/router";
 
 const HeroSection = () => {
+  const router = useRouter();
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    router.push('/collection');
+  }
+
   return (
     <div className={Style.heroSection}>
       <div className={Style.heroSection_box}>
@@ -14,7 +22,7 @@ const HeroSection = () => {
             Discover the most outstanding NTFs in all topics of life. Creative
             your NTFs and sell them
           </p>
-          <Button btnName="Start your search" />
+          <Button btnName="Start your search" handleClick={handleClick} />
         </div>
         <div className={Style.heroSection_box_right}>
           <Image

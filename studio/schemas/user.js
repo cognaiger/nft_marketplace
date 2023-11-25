@@ -17,6 +17,19 @@ export default {
             name: 'profileImage',
             title: 'Profile Image',
             type: 'image',
+        },
+        {
+            name: 'NFTown',
+            title: 'NFT Own',
+            type: 'array',
+            of: [
+                {
+                    type: 'reference',
+                    to: [
+                        {type: 'nfts'}
+                    ]
+                }
+            ]
         }
     ]
 }
