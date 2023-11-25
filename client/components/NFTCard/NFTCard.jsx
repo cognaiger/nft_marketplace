@@ -2,7 +2,7 @@ import React from "react";
 import { BsImages } from "react-icons/bs";
 import Style from "./NFTCard.module.css";
 import { MARKETPLACE_ADDR } from "../../common/const";
-import { MediaRenderer, useContract, useDirectListings, useValidDirectListings } from "@thirdweb-dev/react";
+import { MediaRenderer, useContract, useValidDirectListings } from "@thirdweb-dev/react";
 import Link from "next/link";
 
 const NFTCard = () => {
@@ -11,7 +11,7 @@ const NFTCard = () => {
         data: directListings,
         isLoading: loadingDirectListing,
         error
-    } = useDirectListings(marketplace);
+    } = useValidDirectListings(marketplace);
     console.log(directListings);
 
     const calRemainingTime = (s) => {

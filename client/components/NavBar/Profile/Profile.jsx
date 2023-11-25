@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from "next/legacy/image";
 import { FaUserAlt, FaRegImage, FaUserEdit } from "react-icons/fa";
-import { MdHelpCenter } from "react-icons/md";
-import { TbDownloadOff, TbDownload } from "react-icons/tb";
 import Link from "next/link";
 import Style from "./Profile.module.css";
 import images from "../../../img";
@@ -42,7 +40,7 @@ const Profile = () => {
                     <div className={Style.profile_menu_one_item}>
                         <FaUserEdit />
                         <p>
-                            <Link href={{ pathname: "/edit-profile" }}>Edit Profile</Link>
+                            <Link href={{ pathname: "/account" }}>Edit Profile</Link>
                         </p>
                     </div>
                 </div>

@@ -39,16 +39,14 @@
 }
 
 .upload_box_btn {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    justify-content: center;
     margin-block: 4rem;
     gap: 2rem;
 }
 
 .upload_box_btn_style {
     width: 100%;
-    display: grid;
-    align-self: center;
     font-size: 1.3rem;
 }
 

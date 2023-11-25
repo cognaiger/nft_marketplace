@@ -14,6 +14,21 @@
     font-size: 1.3rem;
 }
 
+.labelSpecial {
+    display: block;
+    width: 100%;
+    margin-left: 1rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-top: 2rem;
+}
+
+.radioGroup {
+    display: flex;
+    justify-content: space-around;
+    font-size: medium;
+}
+
 .Form_box_input_userName {
     width: 100%;
     border: 1px solid var(--icons-color);

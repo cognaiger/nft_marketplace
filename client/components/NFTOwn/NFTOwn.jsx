@@ -48,7 +48,7 @@ const NFTOwn = () => {
 
     return (
         <div className={Style.NFTCard}>
-            {nftOwn.map((el, i) => (
+            {nftOwn?.map((el, i) => (
                 <Link href={`/nft/${el.id}`}>
                     <div className={Style.NFTCard_box} key={el.id}>
                         <div className={Style.NFTCard_box_img}>

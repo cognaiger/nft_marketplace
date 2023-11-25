@@ -1,15 +1,21 @@
 import React from "react";
-import { HiOutlineMail } from "react-icons/hi";
-import { MdOutlineHttp, MdOutlineContentCopy } from "react-icons/md";
-import {
-    TiSocialFacebook,
-    TiSocialTwitter,
-    TiSocialInstagram,
-} from "react-icons/ti";
 import Style from "./Form.module.css";
 import { Button } from "../../components/componentsindex.js";
+import { client } from "../../sanityClient";
 
 const Form = () => {
+    const uploadProfile = async (e) => {
+        e.preventDefault();
+
+        const user = {
+            _id: user._id,
+            userName: username,
+            description: des,
+        }
+        const res = await client.createOrReplace(user);
+        console.log(res);
+    }
+
     return (
         <div className={Style.Form}>
             <div className={Style.Form_box}>
@@ -24,16 +30,6 @@ const Form = () => {
                     </div>
 
                     <div className={Style.Form_box_input}>
-                        <label htmlFor="email">Email</label>
-                        <div className={Style.Form_box_input_box}>
-                            <div className={Style.Form_box_input_box_icon}>
-                                <HiOutlineMail />
-                            </div>
-                            <input type="text" placeholder="Email*" />
-                        </div>
-                    </div>
-
-                    <div className={Style.Form_box_input}>
                         <label htmlFor="description">Description</label>
                         <textarea
                             name=""
@@ -43,68 +39,10 @@ const Form = () => {
                             placeholder="something about yourself in few words"
                         ></textarea>
                     </div>
-
-                    <div className={Style.Form_box_input}>
-                        <label htmlFor="website">Website</label>
-                        <div className={Style.Form_box_input_box}>
-                            <div className={Style.Form_box_input_box_icon}>
-                                <MdOutlineHttp />
-                            </div>
-
-                            <input type="text" placeholder="website" />
-                        </div>
-                    </div>
-
-                    <div className={Style.Form_box_input_social}>
-                        <div className={Style.Form_box_input}>
-                            <label htmlFor="facebook">Facebook</label>
-                            <div className={Style.Form_box_input_box}>
-                                <div className={Style.Form_box_input_box_icon}>
-                                    <TiSocialFacebook />
-                                </div>
-                                <input type="text" placeholder="http://shoaib" />
-                            </div>
-                        </div>
-                        <div className={Style.Form_box_input}>
-                            <label htmlFor="Twitter">Twitter</label>
-                            <div className={Style.Form_box_input_box}>
-                                <div className={Style.Form_box_input_box_icon}>
-                                    <TiSocialTwitter />
-                                </div>
-                                <input type="text" placeholder="http://shoaib" />
-                            </div>
-                        </div>
-                        <div className={Style.Form_box_input}>
-                            <label htmlFor="Instragram">Instragram</label>
-                            <div className={Style.Form_box_input_box}>
-                                <div className={Style.Form_box_input_box_icon}>
-                                    <TiSocialInstagram />
-                                </div>
-                                <input type="text" placeholder="http://shoaib" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={Style.Form_box_input}>
-                        <label htmlFor="wallet">Wallet address</label>
-                        <div className={Style.Form_box_input_box}>
-                            <div className={Style.Form_box_input_box_icon}>
-                                <MdOutlineHttp />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8"
-                            />
-                            <div className={Style.Form_box_input_box_icon}>
-                                <MdOutlineContentCopy />
-                            </div>
-                        </div>
-                    </div>
-
+                
                     <div className={Style.Form_box_btn}>
                         <Button
                             btnName="Upload profile"
-                            handleClick={() => { }}
                             classStyle={Style.button}
                         />
                     </div>
