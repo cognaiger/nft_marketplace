@@ -1,9 +1,9 @@
 import React from 'react';
-import NFTDetailsPage from '../../NFTDetailsPage/NFTDetailsPage';
+import NFTDetailsPage from '../../NFTDetailDirect/NFTDetailsPage';
 import { useRouter } from 'next/router';
 
 const NFTDetail = () => {
-    const router = useRouter()
+    const router = useRouter();
 
     return (
         <div>

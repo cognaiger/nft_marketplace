@@ -46,7 +46,7 @@ const UploadNFT = () => {
                     pricePerToken: price,
                     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
                     startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60)
                 })
             }
 
@@ -56,7 +56,7 @@ const UploadNFT = () => {
                     tokenId: tokenId,
                     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
                     startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
+                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60),
                     bidBufferBps: 100,
                     timeBufferInSeconds: 5,
                     minimumBidAmount: 0.1,

@@ -15,8 +15,9 @@ import FollowerTab from "./FollowerTab/FollowerTab";
 import Slider from "./Slider/Slider";
 import Brand from "./Brand/Brand";
 import Video from "./Video/Video";
+import NFTAuction from "./NFTAuction/NFTAuction";
 
 export {
     Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Subscribe, Title, Category, Filter, NFTCard, Collection, AudioLive, FollowerTab,
-    Slider, Brand, Video
+    Slider, Brand, Video, NFTAuction
 };

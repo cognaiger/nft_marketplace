@@ -1,5 +1,5 @@
 import React from "react";
-import NFTDetailsPage from "../NFTDetailsPage/NFTDetailsPage";
+import NFTDetailsPage from "../NFTDetailDirect/NFTDetailsPage";
 
 const NFTDetails = () => {
     return (

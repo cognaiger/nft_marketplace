@@ -1,20 +1,20 @@
 import React from "react";
 import { BsImages } from "react-icons/bs";
-import Style from "./NFTCard.module.css";
+import Style from "./NFTAuction.module.css";
 import { MARKETPLACE_ADDR } from "../../common/const";
-import { MediaRenderer, useContract, useValidDirectListings } from "@thirdweb-dev/react";
+import { MediaRenderer, useContract, useEnglishAuctions } from "@thirdweb-dev/react";
 import Link from "next/link";
 
-const NFTCard = () => {
+const NFTAuction = () => {
     const { contract: marketplace, isLoading: loadingMarketplace } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
     const {
-        data: directListings,
-        isLoading: loadingDirectListing,
+        data: auctionListing,
+        isLoading: loadingAuctionListing,
         error
-    } = useValidDirectListings(marketplace, {
+    } = useEnglishAuctions(marketplace, {
         count: 9
     });
-    console.log(directListings);
+    console.log(auctionListing);
 
     const calRemainingTime = (s) => {
         let res;
@@ -30,14 +30,14 @@ const NFTCard = () => {
     return (
         <div>
             {
-                loadingDirectListing ? (
+                loadingAuctionListing ? (
                     <div className={Style.NFTCard}>
                         Loading listings ...
                     </div>
                 ) : (
                     <div className={Style.NFTCard}>
-                        {directListings.map((el, i) => (
-                            <Link href={`/nft/${el.id}`}>
+                        {auctionListing.map((el, i) => (
+                            <Link href={`/nftAuction/${el.id}`}>
                                 <div className={Style.NFTCard_box} key={el.id}>
                                     <div className={Style.NFTCard_box_img}>
                                         <MediaRenderer
@@ -67,8 +67,15 @@ const NFTCard = () => {
                                                     <div
                                                         className={Style.NFTCard_box_update_details_price_box_bid}
                                                     >
-                                                        <small>Price</small>
-                                                        <p>{el.currencyValuePerToken.displayValue} {el.currencyValuePerToken.symbol}</p>
+                                                        <small>Buyout Price</small>
+                                                        <p>{el.buyoutCurrencyValue.displayValue} {el.buyoutCurrencyValue.symbol}</p>
+                                                    </div>
+
+                                                    <div
+                                                        className={Style.NFTCard_box_update_details_price_box_bid}
+                                                    >
+                                                        <small>Current Bid</small>
+                                                        <p>{el.buyoutCurrencyValue.displayValue} {el.buyoutCurrencyValue.symbol}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,4 +96,4 @@ const NFTCard = () => {
     );
 };
 
-export default NFTCard;
+export default NFTAuction;

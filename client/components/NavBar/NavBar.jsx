@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/legacy/image";
 import { MdNotifications } from "react-icons/md";
 import { BsSearch } from "react-icons/bs";
 import { CgMenuRight } from "react-icons/cg";
 import Style from "./NavBar.module.css";
-import { Discover, HelpCenter, Notification, Profile, SideBar } from "./index";
+import { Discover, HelpCenter, Notification, Profile } from "./index";
 import { Button } from "../componentsindex";
 import images from "../../img";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
@@ -62,8 +62,27 @@ const NavBar = () => {
         }
     };
 
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setDiscover(false);
+                setHelp(false);
+                setNotification(false);
+                setProfile(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className={Style.navbar}>
+        <div className={Style.navbar} ref={containerRef}>
             <div className={Style.navbar_container}>
                 <div className={Style.navbar_container_left}>
                     <div className={Style.logo}>

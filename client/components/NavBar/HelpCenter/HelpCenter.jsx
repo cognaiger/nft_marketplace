@@ -9,10 +9,6 @@ const HelpCenter = () => {
             link: "aboutus",
         },
         {
-            name: "Contact Us",
-            link: "contactus",
-        },
-        {
             name: "Subscription",
             link: "subscription",
         },
