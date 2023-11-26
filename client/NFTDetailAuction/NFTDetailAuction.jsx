@@ -1,16 +1,17 @@
 import React from "react";
 import { NFTDescription, NFTDetailsImg } from "./NFTDetailsIndex";
-import Style from "./NFTDetailsPage.module.css";
-import { useContract, useDirectListing } from "@thirdweb-dev/react";
+import Style from "./NFTDetailAuction.module.css";
+import { useContract, useEnglishAuction } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDR } from "../common/const";
 
-const NFTDetailsPage = ({ id }) => {
+const NFTDetailAuction = ({ id }) => {
     const { contract } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
     const {
-        data: directListing,
+        data: englishAuction,
         isLoading,
         error,
-    } = useDirectListing(contract, id);
+    } = useEnglishAuction(contract, id);
+    console.log(englishAuction);
 
     return (
         <div>
@@ -21,8 +22,8 @@ const NFTDetailsPage = ({ id }) => {
             ) : (
                 <div className={Style.NFTDetailsPage}>
                     <div className={Style.NFTDetailsPage_box}>
-                        <NFTDetailsImg listing={directListing} />
-                        <NFTDescription listing={directListing} />
+                        <NFTDetailsImg listing={englishAuction} />
+                        <NFTDescription listing={englishAuction} />
                     </div>
                 </div>
             )}
@@ -30,4 +31,4 @@ const NFTDetailsPage = ({ id }) => {
     );
 };
 
-export default NFTDetailsPage;
+export default NFTDetailAuction;

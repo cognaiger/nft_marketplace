@@ -1,12 +1,12 @@
-const { useRouter } = require("next/router");
-const { default: NFTDetailsPage } = require("../../NFTDetailDirect/NFTDetailsPage");
+import { useRouter } from "next/router";
+import NFTDetailAuction from "../../NFTDetailAuction/NFTDetailAuction";
 
 const NFTAuction = () => {
     const router = useRouter();
 
     return (
         <div>
-            <NFTDetailsPage id={router.query.nftAuctionId} />
+            <NFTDetailAuction id={router.query.nftAuctionId} />
         </div>
     )
 }
