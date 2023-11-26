@@ -21,12 +21,12 @@ import Style from "./NFTDescription.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex.js";
 import { NFTTabs } from "../NFTDetailsIndex";
-import { Web3Button, useAddress, useContract } from "@thirdweb-dev/react";
+import { Web3Button, useAddress, useContract, useOffers } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDR } from "../../common/const";
 import { client } from "../../sanityClient";
 
 const NFTDescription = ({ listing }) => {
-    const { contract } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
+    const { contract: marketplace } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
     const address = useAddress();
 
     const buyListing = async () => {
@@ -36,13 +36,33 @@ const NFTDescription = ({ listing }) => {
         return txnRes;
     }
 
+    const offerListing = async () => {
+        const offer = {
+            assetContractAddress: listing.assetContractAddress,
+            tokenId: listing.tokenId,
+            currencyContractAddress: "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14",
+            quantity: 1,
+            totalPrice: '0.01',
+            endTimestamp: new Date().getTime() + 1000 * 7 * 24 * 60 * 60,
+        }
+
+        const tx = await marketplace.offers.makeOffer(offer);
+        const receipt = tx.receipt; // the transaction receipt
+        const id = tx.id; // the id of the newly created offer
+    }
+
+    const acceptOffer = async () => {
+        await marketplace.offers.acceptOffer(0);
+    }
+
     const [social, setSocial] = useState(false);
     const [NFTMenu, setNFTMenu] = useState(false);
     const [provanance, setProvanance] = useState(false);
     const [owner, setOwner] = useState(false);
     const [user, setUser] = useState();
     const [showOfferInput, setShowOfferInput] = useState(false);
-    const [offerAmount, setOfferAmount] = useState();
+    const [offerPrice, setOfferPrice] = useState(0);
+    const [offers, setOffers] = useState();
 
     useEffect(() => {
         const addNFT = async (sanityClient = client) => {
@@ -66,19 +86,13 @@ const NFTDescription = ({ listing }) => {
                 console.log(err);
             }
 
-            try {
-                const patch = await sanityClient
-                    .patch(user._id)
-                    .set({ NFTown: [] })
-                    .append('NFTown', [{ _type: 'reference', _ref: listing.id }])
-                    .commit();
-                console.log("append successful");
-            } catch (err) {
-                console.log("err in patch")
-            }
+            const offers = await marketplace.offers.getAll();
+            console.log(offers);
+            setOffers(offers);
         }
 
         addNFT();
+
     }, [])
 
     useEffect(() => {
@@ -107,10 +121,6 @@ const NFTDescription = ({ listing }) => {
     }, [address])
 
     const closeOfferInput = () => {
-        setShowOfferInput(false);
-    }
-
-    const handleOfferSubmit = () => {
         setShowOfferInput(false);
     }
 
@@ -316,26 +326,29 @@ const NFTDescription = ({ listing }) => {
                                 {
                                     !showOfferInput ? (
                                         <Button
-                                            icon=<FaPercentage />
                                             btnName="Make offer"
                                             handleClick={() => setShowOfferInput(true)}
                                             classStyle={Style.button}
-                                        />
+                                        >
+                                            Make Offer
+                                        </Button>
                                     ) : (
                                         <div className={Style.offerInputContainer}>
                                             <input
                                                 type="number"
-                                                value={offerAmount}
-                                                onChange={(e) => setOfferAmount(e.target.value)}
+                                                value={offerPrice}
+                                                onChange={(e) => setOfferPrice(e.target.value)}
                                                 placeholder="Enter Offer Amount"
                                             />
                                             <div className={Style.doubleButton}>
-                                                <Button
-                                                    icon={<FaPercentage />}
-                                                    btnName="Submit Offer"
-                                                    handleClick={handleOfferSubmit}
-                                                    classStyle={Style.button}
-                                                />
+                                                <Web3Button
+                                                    contractAddress={MARKETPLACE_ADDR}
+                                                    action={
+                                                        async () => offerListing()
+                                                    }
+                                                >
+                                                    Submit Offer
+                                                </Web3Button>
                                                 <Button
                                                     btnName="Cancel"
                                                     handleClick={closeOfferInput}
@@ -348,21 +361,31 @@ const NFTDescription = ({ listing }) => {
 
                             </div>
                         ) : (
-                            <div className={Style.NFTDescription_box_profile_biding_box_button}>
-                                <Web3Button
-                                    contractAddress={MARKETPLACE_ADDR}
-                                    action={
-                                        async () => buyListing()
-                                    }
-                                >
-                                    Accept Offer
-                                </Web3Button>
-                                <Button
-                                    icon=<FaPercentage />
-                                    btnName="Cancel Listing"
-                                    handleClick={() => { }}
-                                    classStyle={Style.button}
-                                />
+                            <div>
+                                {offers?.map((el, i) => (
+                                    <div style={{
+                                        marginTop: 20
+                                    }}>
+                                        {el.offerorAddress} offer {el.currencyValue.displayValue} WETH
+                                    </div>
+                                ))}
+                                <div className={Style.NFTDescription_box_profile_biding_box_button}>
+
+                                    <Web3Button
+                                        contractAddress={MARKETPLACE_ADDR}
+                                        action={
+                                            async () => acceptOffer()
+                                        }
+                                    >
+                                        Accept Offer
+                                    </Web3Button>
+                                    <Button
+                                        icon=<FaPercentage />
+                                        btnName="Cancel Listing"
+                                        handleClick={() => { }}
+                                        classStyle={Style.button}
+                                    />
+                                </div>
                             </div>
                         )}
 

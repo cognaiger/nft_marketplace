@@ -14,6 +14,7 @@ const NFTCard = () => {
     } = useValidDirectListings(marketplace, {
         count: 9
     });
+
     console.log(directListings);
 
     const calRemainingTime = (s) => {
