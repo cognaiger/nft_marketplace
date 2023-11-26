@@ -42,7 +42,7 @@
     overflow: hidden;
 }
 
-.NFTCard_box_update_left {
+.NFTCard_dleft {
     background-color: var(--icons-color);
     padding: .5rem 1rem;
     color: var(--main-bg-color);
@@ -114,7 +114,7 @@
 
 .NFTCard_box_update_details_price_box {
     transform: skewX(-45deg);
-    padding-left: 3rem;
+    padding-left: 4rem;
 }
 
 .NFTCard_box_update_details_price_box h4 {

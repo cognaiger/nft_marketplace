@@ -32,6 +32,7 @@ const NFTDescription = ({ listing }) => {
     const buyListing = async () => {
         const quantity = 1;
         txnRes = await contract.directListings.buyFromListing(listing.id, quantity, address);
+
         return txnRes;
     }
 
@@ -44,11 +45,48 @@ const NFTDescription = ({ listing }) => {
     const [offerAmount, setOfferAmount] = useState();
 
     useEffect(() => {
+        const addNFT = async (sanityClient = client) => {
+            const nftDoc = {
+                _type: 'nfts',
+                _id: listing.id,
+                name: listing.asset.name,
+                imagesrc: listing.asset.image,
+                contractAddress: listing.assetContractAddress,
+                id: Number(listing.asset.id)
+            }
+
+            try {
+                const result = await sanityClient.createIfNotExists(nftDoc);
+
+                if (result) {
+                    console.log(`nft was created with id = ${result._id}`);
+                }
+            } catch (err) {
+                console.log("in catch");
+                console.log(err);
+            }
+
+            try {
+                const patch = await sanityClient
+                    .patch(user._id)
+                    .set({ NFTown: [] })
+                    .append('NFTown', [{ _type: 'reference', _ref: listing.id }])
+                    .commit();
+                console.log("append successful");
+            } catch (err) {
+                console.log("err in patch")
+            }
+        }
+
+        addNFT();
+    }, [])
+
+    useEffect(() => {
         let ignore = false;
 
         const fetchUserInfo = async (sanityClient = client) => {
             console.log(address);
-            const query = `*[_type == 'users' && walletAddress == "${address}"] 
+            const query = `*[_type == 'users' && walletAddress == "${listing.creatorAddress}"] 
             { 
               userName,
               walletAddress
@@ -256,7 +294,15 @@ const NFTDescription = ({ listing }) => {
                             </div>
                         </div>
 
-                        {listing.creatorAddress != user?.walletAddress ? (
+                        {listing.status == 2 ? (
+                            <div className={Style.NFTDescription_box_profile_biding_box_button}>
+                                <Button
+                                    icon=<FaPercentage />
+                                    btnName="Completed"
+                                    classStyle={Style.button}
+                                />
+                            </div>
+                        ) : listing.creatorAddress != address ? (
                             <div className={Style.NFTDescription_box_profile_biding_box_button}>
                                 <Web3Button
                                     contractAddress={MARKETPLACE_ADDR}
@@ -318,9 +364,7 @@ const NFTDescription = ({ listing }) => {
                                     classStyle={Style.button}
                                 />
                             </div>
-                        )
-                        }
-
+                        )}
 
                         <div className={Style.NFTDescription_box_profile_biding_box_tabs}>
                             <button onClick={(e) => openTabs(e)}>Provanance</button>

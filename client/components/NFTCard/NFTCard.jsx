@@ -17,7 +17,6 @@ const NFTCard = () => {
     console.log(directListings);
 
     const calRemainingTime = (s) => {
-        let res;
         const d = Math.floor(s / 86400);
         s = s % 86400;
         const h = Math.floor(s / 3600);
@@ -53,7 +52,7 @@ const NFTCard = () => {
                                         <div className={Style.NFTCard_box_update_right}>
                                             <div className={Style.NFTCard_box_update_right_info}>
                                                 <small>Remaining time</small>
-                                                <p>{calRemainingTime(el.endTimeInSeconds)}</p>
+                                                <p>{calRemainingTime(el.endTimeInSeconds - Math.floor(new Date().getTime() / 1000))}</p>
                                             </div>
                                         </div>
                                     </div>

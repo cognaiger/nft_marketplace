@@ -65,7 +65,6 @@ const NFTOwn = () => {
                             <div className={Style.NFTCard_box_update_details_price}>
                                 <div className={Style.NFTCard_box_update_details_price_box}>
                                     <h4>{el.name}</h4>
-
                                 </div>
                             </div>
                             <div className={Style.NFTCard_box_update_details_category}>

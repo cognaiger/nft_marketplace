@@ -5,6 +5,7 @@ import { Button } from "../components/componentsindex.js";
 import { NATIVE_TOKEN_ADDRESS, useContract, useCreateAuctionListing, useCreateDirectListing, useNetwork, useNetworkMismatch, useSwitchChain } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDR } from "../common/const";
 import { useRouter } from "next/router";
+import { client } from "../sanityClient";
 
 const UploadNFT = () => {
     const networkMismatch = useNetworkMismatch();
@@ -46,7 +47,7 @@ const UploadNFT = () => {
                     pricePerToken: price,
                     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
                     startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60)
+                    endTimestamp: new Date(new Date().getTime() + 1000 * 7 * 24 * 60 * 60)
                 })
             }
 
@@ -56,7 +57,7 @@ const UploadNFT = () => {
                     tokenId: tokenId,
                     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
                     startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 7 * 24 * 60 * 60),
+                    endTimestamp: new Date(new Date().getTime() + 1000 * 7 * 24 * 60 * 60),
                     bidBufferBps: 100,
                     timeBufferInSeconds: 5,
                     minimumBidAmount: 0.1,
