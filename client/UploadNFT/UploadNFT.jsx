@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Style from "./Upload.module.css";
 import formStyle from "../AccountPage/Form/Form.module.css";
-import { NATIVE_TOKEN_ADDRESS, Web3Button, useContract, useCreateAuctionListing, useCreateDirectListing, useNetwork, useNetworkMismatch, useSwitchChain } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDR, sdk } from "../common/const";
+import { NATIVE_TOKEN_ADDRESS, Web3Button, useContract, useNetworkMismatch, useSwitchChain } from "@thirdweb-dev/react";
+import { LISTINGTYPE, MARKETPLACE_ADDR, STATUS, sdk } from "../common/const";
 import { useRouter } from "next/router";
 import { client } from "../sanityClient";
 
@@ -13,23 +13,14 @@ const UploadNFT = () => {
         contract: marketplace,
         isLoading: loadingMarketplace
     } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
-    const {
-        mutateAsync: createDirectListing,
-        isLoading: loadingDirectListing,
-        error: errorDirectListing
-    } = useCreateDirectListing(marketplace);
-    const {
-        mutateAsync: createAuctionListing,
-        isLoading: loadingAuctionListing,
-        error: errorAuctionListing
-    } = useCreateAuctionListing(marketplace);
 
     const router = useRouter();
 
-    const [listingType, setListingType] = useState('directListing');
+    const [listingType, setListingType] = useState(LISTINGTYPE.DIRECT);
     const [contractAdr, setContractAdr] = useState('');
     const [tokenId, setTokenId] = useState(0);
     const [price, setPrice] = useState(0);
+    let idMarket = 0;
 
     const upload = async () => {
         try {
@@ -39,34 +30,40 @@ const UploadNFT = () => {
                 return;
             }
 
-            let transactionResult;
+            let tx;
 
-            if (listingType === 'directListing') {
-                transactionResult = await createDirectListing({
+            if (listingType === LISTINGTYPE.DIRECT) {
+                const listing = {
                     assetContractAddress: contractAdr,
                     tokenId: tokenId,
+                    currencyContractAddress: NATIVE_TOKEN_ADDRESS,
                     pricePerToken: price,
-                    currencyContractAddress: NATIVE_TOKEN_ADDRESS,
-                    startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 1000 * 7 * 24 * 60 * 60)
-                })
+                    startTimestamp: new Date(Date.now()),
+                    endTimestamp: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+                }
+                tx = await marketplace.directListings.createListing(listing);
+                console.log(tx);
+                idMarket = tx.id._hex;
             }
 
-            if (listingType === 'auctionListing') {
-                transactionResult = await createAuctionListing({
+            if (listingType === LISTINGTYPE.AUCTION) {
+                const auction = {
                     assetContractAddress: contractAdr,
                     tokenId: tokenId,
                     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
-                    startTimestamp: new Date(),
-                    endTimestamp: new Date(new Date().getTime() + 1000 * 7 * 24 * 60 * 60),
-                    bidBufferBps: 100,
-                    timeBufferInSeconds: 5,
                     minimumBidAmount: 0.001,
-                    buyoutBidAmount: price
-                })
+                    buyoutBidAmount: price,
+                    timeBufferInSeconds: 300, // 5 minutes
+                    bidBufferBps: 500, // 5%
+                    startTimestamp: new Date(Date.now()),
+                    endTimestamp: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+                }
+                tx = await marketplace.englishAuctions.createAuction(auction);
+                console.log(tx);
+                idMarket = tx.id._hex;
             }
 
-            if (transactionResult) {
+            if (tx) {
                 router.push('/');
             }
         } catch (err) {
@@ -82,11 +79,16 @@ const UploadNFT = () => {
         const nftDoc = {
             _type: 'nfts',
             name: nft.metadata.name,
+            description: nft.metadata.description,
+            price: Number(price),
+            endTimeInSecond: Date.now() + 5 * 24 * 60 * 60 * 1000,
+            status: STATUS.LISTING,
             imagesrc: nft.metadata.image,
             contractAddress: contractAdr,
             id: Number(nft.metadata.id),
             ownerAddress: nft.owner,
-            description: nft.metadata.description
+            listingId: Number(idMarket),
+            listingType: listingType
         }
 
         try {
@@ -134,7 +136,7 @@ const UploadNFT = () => {
                             <input
                                 type="radio"
                                 name="listingType"
-                                value="directListing"
+                                value={LISTINGTYPE.DIRECT}
                                 id="directListing"
                                 onChange={(e) => setListingType(e.target.value)}
                                 defaultChecked
@@ -146,7 +148,7 @@ const UploadNFT = () => {
                             <input
                                 type="radio"
                                 name="listingType"
-                                value="auctionListing"
+                                value={LISTINGTYPE.AUCTION}
                                 id="auctionListing"
                                 onChange={(e) => setListingType(e.target.value)}
                             />

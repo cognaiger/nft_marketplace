@@ -19,13 +19,28 @@ export default {
             type: 'string'
         },
         {
+            name: 'price',
+            title: 'Price',
+            type: 'number'
+        },
+        {
+            name: 'endTimeInSecond',
+            title: 'End Time',
+            type: 'number'
+        },
+        {
+            name: 'status',
+            title: 'Status',
+            type: 'string'
+        },
+        {
             name: 'contractAddress',
             title: 'Contract Address',
             type: 'string'
         },
         {
             name: 'id',
-            title: 'id',
+            title: 'ID',
             type: 'number'
         },
         {
@@ -33,5 +48,15 @@ export default {
             title: 'Owner Address',
             type: 'string'
         },
+        {
+            name: 'listingId',
+            title: 'Listing ID',
+            type: 'number'
+        },
+        {
+            name: 'listingType',
+            title: 'Listing Type',
+            type: 'string'
+        }
     ]
 }
