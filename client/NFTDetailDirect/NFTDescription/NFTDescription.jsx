@@ -31,7 +31,7 @@ const NFTDescription = ({ listing }) => {
 
     const buyListing = async () => {
         const quantity = 1;
-        txnRes = await contract.directListings.buyFromListing(listing.id, quantity, address);
+        txnRes = await marketplace.directListings.buyFromListing(listing.id, quantity, address);
 
         return txnRes;
     }

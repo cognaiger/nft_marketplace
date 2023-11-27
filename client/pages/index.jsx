@@ -42,11 +42,6 @@ const Home = () => {
         paragraph="Winning NFTs by bidding highest price"
       />
       <NFTAuction />
-      <Title
-        heading="Browse by category"
-        paragraph="Explore the NFTs in the most featured categories."
-      />
-      <Category />
     </div>
   )
 };

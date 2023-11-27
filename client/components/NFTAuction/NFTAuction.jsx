@@ -2,7 +2,7 @@ import React from "react";
 import { BsImages } from "react-icons/bs";
 import Style from "./NFTAuction.module.css";
 import { MARKETPLACE_ADDR } from "../../common/const";
-import { MediaRenderer, useContract, useEnglishAuctions } from "@thirdweb-dev/react";
+import { MediaRenderer, useContract, useValidEnglishAuctions } from "@thirdweb-dev/react";
 import Link from "next/link";
 
 const NFTAuction = () => {
@@ -11,7 +11,7 @@ const NFTAuction = () => {
         data: auctionListing,
         isLoading: loadingAuctionListing,
         error
-    } = useEnglishAuctions(marketplace, {
+    } = useValidEnglishAuctions(marketplace, {
         count: 9
     });
     console.log(auctionListing);
@@ -53,7 +53,7 @@ const NFTAuction = () => {
                                         <div className={Style.NFTCard_box_update_right}>
                                             <div className={Style.NFTCard_box_update_right_info}>
                                                 <small>Remaining time</small>
-                                                <p>{calRemainingTime(el.endTimeInSeconds)}</p>
+                                                <p>{calRemainingTime(el.endTimeInSeconds - Math.floor(new Date().getTime() / 1000))}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -74,8 +74,8 @@ const NFTAuction = () => {
                                                     <div
                                                         className={Style.NFTCard_box_update_details_price_box_bid}
                                                     >
-                                                        <small>Current Bid</small>
-                                                        <p>{el.buyoutCurrencyValue.displayValue} {el.buyoutCurrencyValue.symbol}</p>
+                                                        <small>Minimum Bid</small>
+                                                        <p>{el.minimumBidCurrencyValue.displayValue} {el.minimumBidCurrencyValue.symbol}</p>
                                                     </div>
                                                 </div>
                                             </div>

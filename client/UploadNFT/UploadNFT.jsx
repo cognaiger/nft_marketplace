@@ -60,7 +60,7 @@ const UploadNFT = () => {
                     endTimestamp: new Date(new Date().getTime() + 1000 * 7 * 24 * 60 * 60),
                     bidBufferBps: 100,
                     timeBufferInSeconds: 5,
-                    minimumBidAmount: 0.1,
+                    minimumBidAmount: 0.001,
                     buyoutBidAmount: price
                 })
             }

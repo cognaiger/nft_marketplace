@@ -21,21 +21,25 @@ import Style from "./NFTDescription.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex.js";
 import { NFTTabs } from "../NFTDetailsIndex";
-import { Web3Button, useAddress, useBuyDirectListing, useContract, useEnglishAuctionWinningBid } from "@thirdweb-dev/react";
+import { Web3Button, useAddress, useBuyDirectListing, useContract, useEnglishAuctionWinningBid, useSafe } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDR } from "../../common/const";
 import { client } from "../../sanityClient";
 
 const NFTDescription = ({ listing }) => {
     const { contract } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
     const address = useAddress();
-    const {
-        data: winningBid,
-        isLoading,
-        error
-    } = useEnglishAuctionWinningBid(contract, listing.id);
+    const [minNextBid, setMinNextBid] = useState(0);
 
     const buyListing = async () => {
         await contract.englishAuctions.buyoutAuction(listing.id);
+    }
+
+    const bid = async () => {
+        await contract.englishAuctions.makeBid(listing.id, bidPrice);
+    }
+
+    const cancelListing = async () => {
+        await contract.englishAuctions.cancelAuction(listing.id);
     }
 
     const [social, setSocial] = useState(false);
@@ -44,6 +48,8 @@ const NFTDescription = ({ listing }) => {
     const [provanance, setProvanance] = useState(false);
     const [owner, setOwner] = useState(false);
     const [user, setUser] = useState();
+    const [bidOpen, setBidOpen] = useState(false);
+    const [bidPrice, setBidPrice] = useState(0);
 
     useEffect(() => {
         let ignore = false;
@@ -69,6 +75,25 @@ const NFTDescription = ({ listing }) => {
             ignore = true;
         };
     }, [address])
+
+    useEffect(() => {
+        let ignore = false;
+
+        const fetchBid = async () => {
+            const minNextBid = await contract.englishAuctions.getMinimumNextBid(listing.id);
+
+            console.log(minNextBid);
+            if (!ignore) {
+                setMinNextBid(minNextBid);
+            }
+        }
+
+        fetchBid();
+
+        return () => {
+            ignore = true;
+        };
+    }, [])
 
     const historyArray = [
         images.user1,
@@ -274,14 +299,10 @@ const NFTDescription = ({ listing }) => {
                                     Style.NFTDescription_box_profile_biding_box_price_bid
                                 }
                             >
-                                <small>Current bid</small>
-                                {winningBid ? (
-                                    <p>
-                                        {winningBid.bidAmountCurrencyValue.displayValue} {winningBid.bidAmountCurrencyValue.symbol}
-                                    </p>
-                                ) : (
-                                    <p>0</p>
-                                )}
+                                <small>Minimum Next Bid</small>
+                                <p>
+                                    {minNextBid.displayValue} {minNextBid.symbol}
+                                </p>
 
                             </div>
 
@@ -316,21 +337,56 @@ const NFTDescription = ({ listing }) => {
                                     >
                                         Buy Now
                                     </Web3Button>
-                                    <Button
-                                        icon=<FaWallet />
-                                        btnName="Place a bid"
-                                        handleClick={() => { }}
-                                        classStyle={Style.button}
-                                    />
+                                    {
+                                        !bidOpen ? (
+                                            <Button
+                                                icon=<FaWallet />
+                                                btnName="Place a bid"
+                                                handleClick={() => setBidOpen(!bidOpen)}
+                                                classStyle={Style.button}
+                                            />
+                                        ) : (
+                                            <div className={Style.offerInputContainer}>
+                                                <input
+                                                    type="number"
+                                                    value={bidPrice}
+                                                    onChange={(e) => setBidPrice(e.target.value)}
+                                                    placeholder="Enter Offer Amount"
+                                                />
+                                                <div className={Style.doubleButton}>
+                                                    <Web3Button
+                                                        contractAddress={MARKETPLACE_ADDR}
+                                                        action={
+                                                            async () => bid()
+                                                        }
+                                                    >
+                                                        Submit Bid
+                                                    </Web3Button>
+                                                    <Button
+                                                        btnName="Cancel"
+                                                        handleClick={() => setBidOpen(false)}
+                                                        classStyle={Style.button}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+
                                 </div>
                             ) : (
                                 <div className={Style.NFTDescription_box_profile_biding_box_button}>
-                                    <Button
-                                        icon=<FaWallet />
-                                        btnName="Cancel bidding"
-                                        handleClick={() => { }}
-                                        classStyle={Style.button}
-                                    />
+                                    <Web3Button
+                                        theme="dark"
+                                        contractAddress={MARKETPLACE_ADDR}
+                                        action={
+                                            async () => cancelListing()
+                                        }
+                                        onSuccess={(res) => alert("Success!")}
+                                        onError={(error) => alert("Something went wrong!")}
+                                        className={Style.button}
+                                    >
+                                        Cancel Listing
+                                    </Web3Button>
                                 </div>
                             )
                         )}
