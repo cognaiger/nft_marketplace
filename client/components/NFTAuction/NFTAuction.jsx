@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsImages } from "react-icons/bs";
 import Style from "./NFTAuction.module.css";
-import { MARKETPLACE_ADDR } from "../../common/const";
-import { MediaRenderer, useContract, useValidEnglishAuctions } from "@thirdweb-dev/react";
+import { MediaRenderer } from "@thirdweb-dev/react";
 import Link from "next/link";
+import { client } from "../../sanityClient";
 
 const NFTAuction = () => {
-    const { contract: marketplace, isLoading: loadingMarketplace } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
-    const {
-        data: auctionListing,
-        isLoading: loadingAuctionListing,
-        error
-    } = useValidEnglishAuctions(marketplace, {
-        count: 9
-    });
-    console.log(auctionListing);
+    const [auctionNFT, setAuctionNFT] = useState();
+
+    useEffect(() => {
+        let ignore = false;
+
+        const fetchAucListing = async (sanityClient = client) => {
+            const query = `*[_type == 'nfts' && listingType == 'auction' && status == 'listing'] 
+            {
+                _id,
+                name,
+                imagesrc,
+                price,
+                endTimeInSecond,
+                listingId
+            }`;
+            const data = await sanityClient.fetch(query);
+
+            console.log(data);
+            if (!ignore) {
+                setAuctionNFT(data);
+            }
+        }
+
+        fetchAucListing();
+
+        return () => {
+            ignore = true;
+        };
+    }, [])
 
     const calRemainingTime = (s) => {
         let res;
@@ -30,18 +50,18 @@ const NFTAuction = () => {
     return (
         <div>
             {
-                loadingAuctionListing ? (
+                !auctionNFT ? (
                     <div className={Style.NFTCard}>
                         Loading listings ...
                     </div>
                 ) : (
                     <div className={Style.NFTCard}>
-                        {auctionListing.map((el, i) => (
-                            <Link href={`/nftAuction/${el.id}`}>
-                                <div className={Style.NFTCard_box} key={el.id}>
+                        {auctionNFT.map((el, i) => (
+                            <Link href={`/nftAuction/${el.listingId}`}>
+                                <div className={Style.NFTCard_box} key={el._id}>
                                     <div className={Style.NFTCard_box_img}>
                                         <MediaRenderer
-                                            src={el.asset.image}
+                                            src={el.imagesrc}
                                             alt="NFT images"
                                             width={450}
                                             height={600}
@@ -53,7 +73,7 @@ const NFTAuction = () => {
                                         <div className={Style.NFTCard_box_update_right}>
                                             <div className={Style.NFTCard_box_update_right_info}>
                                                 <small>Remaining time</small>
-                                                <p>{calRemainingTime(el.endTimeInSeconds - Math.floor(new Date().getTime() / 1000))}</p>
+                                                <p>{calRemainingTime(Math.floor(el.endTimeInSecond / 1000 - new Date().getTime() / 1000))}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -61,21 +81,21 @@ const NFTAuction = () => {
                                     <div className={Style.NFTCard_box_update_details}>
                                         <div className={Style.NFTCard_box_update_details_price}>
                                             <div className={Style.NFTCard_box_update_details_price_box}>
-                                                <h4>{el.asset.name}</h4>
+                                                <h4>{el.name}</h4>
 
                                                 <div className={Style.NFTCard_box_update_details_price_box_box}>
                                                     <div
                                                         className={Style.NFTCard_box_update_details_price_box_bid}
                                                     >
                                                         <small>Buyout Price</small>
-                                                        <p>{el.buyoutCurrencyValue.displayValue} {el.buyoutCurrencyValue.symbol}</p>
+                                                        <p>{el.price} ETH</p>
                                                     </div>
 
                                                     <div
                                                         className={Style.NFTCard_box_update_details_price_box_bid}
                                                     >
                                                         <small>Minimum Bid</small>
-                                                        <p>{el.minimumBidCurrencyValue.displayValue} {el.minimumBidCurrencyValue.symbol}</p>
+                                                        <p>0.001 ETH</p>
                                                     </div>
                                                 </div>
                                             </div>

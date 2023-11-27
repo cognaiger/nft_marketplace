@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Style from "../styles/index.module.css";
-import { AudioLive, BigNFTSilder, Category, HeroSection, NFTAuction, NFTCard, Service, Title } from "../components/componentsindex";
+import { AudioLive, BigNFTSilder, HeroSection, NFTAuction, NFTCard, Service, Title } from "../components/componentsindex";
 import { useAddress } from "@thirdweb-dev/react";
 import { client } from "../sanityClient";
 
@@ -26,11 +26,6 @@ const Home = () => {
       <HeroSection />
       <Service />
       <BigNFTSilder />
-      <Title
-        heading="Audio Collection"
-        paragraph="Discover the most outstanding NFTs in all topics of life."
-      />
-      <AudioLive />
 
       <Title
         heading="Direct Listings"

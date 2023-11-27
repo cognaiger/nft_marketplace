@@ -52,12 +52,10 @@
 }
 
 .bigNFTSlider_box_left_creator_profile_info{
-    line-height: 0;
-}
-
-.bigNFTSlider_box_left_creator_profile_info p{
-    margin-bottom: -.7rem;
-    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px
 }
 
 .bigNFTSlider_box_left_creator_collection{
@@ -74,11 +72,16 @@
     line-height: 0;
 }
 
-.bigNFTSlider_box_left_bidding_box{
+.bigNFTSlider_box_left_bidding_box {
     border: 3px solid var(--shadow-dark-color);
     margin-block: 2rem;
     padding: 0 4rem;
     border-radius: .5rem;
+}
+
+.bigNFTSlider_box_left_bidding_box p{
+    font-size: medium;
+    font-weight: 600;
 }
 
 .bigNFTSlider_box_left_bidding_box_auction{
