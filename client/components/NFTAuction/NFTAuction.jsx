@@ -57,8 +57,8 @@ const NFTAuction = () => {
                 ) : (
                     <div className={Style.NFTCard}>
                         {auctionNFT.map((el, i) => (
-                            <Link href={`/nftAuction/${el.listingId}`}>
-                                <div className={Style.NFTCard_box} key={el._id}>
+                            <Link href={`/nftAuction/${el.listingId}`} key={i}>
+                                <div className={Style.NFTCard_box}>
                                     <div className={Style.NFTCard_box_img}>
                                         <MediaRenderer
                                             src={el.imagesrc}

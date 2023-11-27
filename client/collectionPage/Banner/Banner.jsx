@@ -3,6 +3,7 @@ import Image from "next/legacy/image";
 import Style from "./Banner.module.css";
 
 const Banner = ({ bannerImage }) => {
+
     return (
         <div className={Style.banner}>
             <div className={Style.banner_img}>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Style from "../styles/index.module.css";
-import { AudioLive, BigNFTSilder, HeroSection, NFTAuction, NFTCard, Service, Title } from "../components/componentsindex";
+import { BigNFTSilder, HeroSection, NFTAuction, NFTCard, Service, Title } from "../components/componentsindex";
 import { useAddress } from "@thirdweb-dev/react";
 import { client } from "../sanityClient";
 

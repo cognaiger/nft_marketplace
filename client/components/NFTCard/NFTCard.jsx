@@ -56,8 +56,8 @@ const NFTCard = () => {
                 ) : (
                     <div className={Style.NFTCard}>
                         {directNFT.map((el, i) => (
-                            <Link href={`/nft/${el.listingId}`}>
-                                <div className={Style.NFTCard_box} key={el._id}>
+                            <Link href={`/nft/${el.listingId}`} key={i}>
+                                <div className={Style.NFTCard_box}>
                                     <div className={Style.NFTCard_box_img}>
                                         <MediaRenderer
                                             src={el.imagesrc}

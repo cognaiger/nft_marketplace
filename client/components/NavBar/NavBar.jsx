@@ -11,6 +11,7 @@ import { Button } from "../componentsindex";
 import images from "../../img";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const NavBar = () => {
     const [discover, setDiscover] = useState(false);
@@ -19,6 +20,7 @@ const NavBar = () => {
     const [profile, setProfile] = useState(false);
 
     const address = useAddress();
+    const router = useRouter();
 
     const openMenu = (e) => {
         const btnText = e.target.innerText;
@@ -136,7 +138,7 @@ const NavBar = () => {
 
                     {/* CREATE BUTTON SECTION */}
                     <div className={Style.navbar_container_right_button}>
-                        <Button btnName="Create" handleClick={() => { }} />
+                        <Button btnName="Create" handleClick={() => {router.push('/uploadNFT')}} />
                     </div>
 
                     <ConnectWallet theme={"dark"} modalSize="wide" />

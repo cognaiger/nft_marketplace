@@ -10,7 +10,6 @@ import Category from "./Category/Category";
 import Filter from "./Filter/Filter";
 import NFTCard from "./NFTCard/NFTCard";
 import Collection from "./Collection/Collection";
-import AudioLive from "./AudioLive/AudioLive";
 import FollowerTab from "./FollowerTab/FollowerTab";
 import Slider from "./Slider/Slider";
 import Brand from "./Brand/Brand";
@@ -18,6 +17,6 @@ import Video from "./Video/Video";
 import NFTAuction from "./NFTAuction/NFTAuction";
 
 export {
-    Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Subscribe, Title, Category, Filter, NFTCard, Collection, AudioLive, FollowerTab,
+    Button, Footer, NavBar, HeroSection, Service, BigNFTSilder, Subscribe, Title, Category, Filter, NFTCard, Collection, FollowerTab,
     Slider, Brand, Video, NFTAuction
 };

@@ -1,67 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/legacy/image";
-import {
-    TiSocialFacebook,
-    TiSocialLinkedin,
-    TiSocialTwitter,
-    TiSocialInstagram,
-} from "react-icons/ti";
 import Style from "./collectionProfile.module.css";
-import images from "../../img";
+import { client } from "../../sanityClient";
 
-const collectionProfile = () => {
-    const cardArray = [1, 2, 3, 4];
-    
+const collectionProfile = ({ address }) => {
+    const [collectionData, setCollectionData] = useState();
+
+    useEffect(() => {
+        let ignore = false;
+
+        const fetchCollection = async (sanityClient = client) => {
+            console.log(address);
+            const query = `*[_type == 'collections' && address == "${address}"] 
+            { 
+                name,
+                imagesrc,
+                description,
+                floorPrice,
+                totalVolume,
+                bestOffer,
+                listed
+            } ` ;
+            const data = await sanityClient.fetch(query);
+
+            console.log(data);
+            if (!ignore) {
+                setCollectionData(data[0]);
+            }
+        }
+
+        fetchCollection();
+
+        return () => {
+            ignore = true;
+        };
+    }, [address])
+
     return (
         <div className={Style.collectionProfile}>
-            <div className={Style.collectionProfile_box}>
-                <div className={Style.collectionProfile_box_left}>
-                    <Image
-                        src={images.nft_image_1}
-                        alt="nft image"
-                        width={800}
-                        height={800}
-                        className={Style.collectionProfile_box_left_img}
-                    />
-
-                    <div className={Style.collectionProfile_box_left_social}>
-                        <a href="#">
-                            <TiSocialFacebook />
-                        </a>
-                        <a href="#">
-                            <TiSocialInstagram />
-                        </a>
-                        <a href="#">
-                            <TiSocialLinkedin />
-                        </a>
-                        <a href="#">
-                            <TiSocialTwitter />
-                        </a>
-                    </div>
+            {!collectionData ? (
+                <div className={Style.collectionProfile_box}>
+                    Loading...
                 </div>
+            ) : (
+                <div className={Style.collectionProfile_box}>
+                    <div className={Style.collectionProfile_box_left}>
+                        <Image
+                            src={collectionData.imagesrc}
+                            alt="nft image"
+                            width={800}
+                            height={800}
+                            className={Style.collectionProfile_box_left_img}
+                        />
+                    </div>
 
-                <div className={Style.collectionProfile_box_middle}>
-                    <h1>Awesome NFTs Collection</h1>
-                    <p>
-                        Karafuru is home to 5,555 generative arts where colors reign
-                        supreme. Leave the drab reality and enter the world of Karafuru by
-                        Museum of Toys.
-                    </p>
+                    <div className={Style.collectionProfile_box_middle}>
+                        <h1>{collectionData.name}</h1>
+                        <p>
+                            {collectionData.description}
+                        </p>
 
-                    <div className={Style.collectionProfile_box_middle_box}>
-                        {cardArray.map((el, i) => (
+                        <div className={Style.collectionProfile_box_middle_box}>
                             <div
                                 className={Style.collectionProfile_box_middle_box_item}
-                                key={i + 1}
                             >
-                                <small>Floor price</small>
-                                <p>${i + 1}95,4683</p>
-                                <span>+ {i + 2}.11%</span>
+                                    <small>Total volume</small>
+                                    <p>{collectionData.totalVolume} ETH</p>
                             </div>
-                        ))}
+                            <div
+                                className={Style.collectionProfile_box_middle_box_item}
+                            >
+                                <small>Floor Price</small>
+                                <p>{collectionData.floorPrice} ETH</p>
+                            </div>
+                            <div
+                                className={Style.collectionProfile_box_middle_box_item}
+                            >
+                                <small>Best Offer</small>
+                                <p>{collectionData.bestOffer} WETH</p>
+                            </div>
+                            <div
+                                className={Style.collectionProfile_box_middle_box_item}
+                            >
+                                <small>Listed</small>
+                                <p>{collectionData.listed} %</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
