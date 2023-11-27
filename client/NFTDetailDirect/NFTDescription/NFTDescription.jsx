@@ -8,7 +8,7 @@ import {
     MdOutlineDeleteSweep,
 } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
-import { FaWallet, FaPercentage } from "react-icons/fa";
+import { FaPercentage } from "react-icons/fa";
 import {
     TiSocialFacebook,
     TiSocialLinkedin,
@@ -53,6 +53,10 @@ const NFTDescription = ({ listing }) => {
 
     const acceptOffer = async () => {
         await marketplace.offers.acceptOffer(0);
+    }
+
+    const cancelListing = async () => {
+        await marketplace.directListings.cancelListing(listing.id);
     }
 
     const [social, setSocial] = useState(false);
@@ -379,12 +383,14 @@ const NFTDescription = ({ listing }) => {
                                     >
                                         Accept Offer
                                     </Web3Button>
-                                    <Button
-                                        icon=<FaPercentage />
-                                        btnName="Cancel Listing"
-                                        handleClick={() => { }}
-                                        classStyle={Style.button}
-                                    />
+                                    <Web3Button
+                                        contractAddress={MARKETPLACE_ADDR}
+                                        action={
+                                            async () => cancelListing()
+                                        }
+                                    >
+                                        Cancel Listing
+                                    </Web3Button>
                                 </div>
                             </div>
                         )}

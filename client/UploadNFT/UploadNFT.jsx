@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Style from "./Upload.module.css";
 import formStyle from "../AccountPage/Form/Form.module.css";
-import { Button } from "../components/componentsindex.js";
-import { NATIVE_TOKEN_ADDRESS, useContract, useCreateAuctionListing, useCreateDirectListing, useNetwork, useNetworkMismatch, useSwitchChain } from "@thirdweb-dev/react";
-import { MARKETPLACE_ADDR } from "../common/const";
+import { NATIVE_TOKEN_ADDRESS, Web3Button, useContract, useCreateAuctionListing, useCreateDirectListing, useNetwork, useNetworkMismatch, useSwitchChain } from "@thirdweb-dev/react";
+import { MARKETPLACE_ADDR, sdk } from "../common/const";
 import { useRouter } from "next/router";
 import { client } from "../sanityClient";
 
 const UploadNFT = () => {
     const networkMismatch = useNetworkMismatch();
     const switchNetwork = useSwitchChain();
-    const { contract: marketplace, isLoading: loadingMarketplace } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
+    const {
+        contract: marketplace,
+        isLoading: loadingMarketplace
+    } = useContract(MARKETPLACE_ADDR, "marketplace-v3");
     const {
         mutateAsync: createDirectListing,
         isLoading: loadingDirectListing,
@@ -29,9 +31,8 @@ const UploadNFT = () => {
     const [tokenId, setTokenId] = useState(0);
     const [price, setPrice] = useState(0);
 
-    const upload = async (e) => {
+    const upload = async () => {
         try {
-            e.preventDefault();
 
             if (networkMismatch) {
                 switchNetwork && switchNetwork(11155111);
@@ -70,6 +71,33 @@ const UploadNFT = () => {
             }
         } catch (err) {
             console.log(err)
+        }
+    }
+
+    const addNFT = async (sanityClient = client) => {
+        const contract = await sdk.getContract(contractAdr);
+        const nft = await contract.erc721.get(tokenId);
+
+        console.log(nft);
+        const nftDoc = {
+            _type: 'nfts',
+            name: nft.metadata.name,
+            imagesrc: nft.metadata.image,
+            contractAddress: contractAdr,
+            id: Number(nft.metadata.id),
+            ownerAddress: nft.owner,
+            description: nft.metadata.description
+        }
+
+        try {
+            const result = await sanityClient.create(nftDoc);
+
+            if (result) {
+                console.log(`nft was created with id = ${result._id}`);
+            }
+        } catch (err) {
+            console.log("in catch");
+            console.log(err);
         }
     }
 
@@ -139,11 +167,16 @@ const UploadNFT = () => {
                 </div>
 
                 <div className={Style.upload_box_btn}>
-                    <Button
-                        btnName="Upload"
-                        handleClick={upload}
-                        classStyle={Style.upload_box_btn_style}
-                    />
+                    <Web3Button
+                        theme="light"
+                        contractAddress={MARKETPLACE_ADDR}
+                        action={
+                            async () => upload()
+                        }
+                        onSuccess={() => addNFT()}
+                    >
+                        Upload
+                    </Web3Button>
                 </div>
             </div>
         </div>
