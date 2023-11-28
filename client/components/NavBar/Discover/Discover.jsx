@@ -9,10 +9,6 @@ const Discover = () => {
             link: "collection",
         },
         {
-            name: "Search",
-            link: "searchPage",
-        },
-        {
             name: "Author Profile",
             link: "author",
         }

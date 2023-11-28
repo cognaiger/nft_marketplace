@@ -20,7 +20,6 @@ import { BiTransferAlt, BiDollar } from "react-icons/bi";
 import Style from "./NFTDescription.module.css";
 import images from "../../img";
 import { Button } from "../../components/componentsindex.js";
-import { NFTTabs } from "../NFTDetailsIndex";
 import { Web3Button, useAddress, useContract, useOffers } from "@thirdweb-dev/react";
 import { MARKETPLACE_ADDR } from "../../common/const";
 import { client } from "../../sanityClient";
@@ -61,12 +60,11 @@ const NFTDescription = ({ listing }) => {
 
     const [social, setSocial] = useState(false);
     const [NFTMenu, setNFTMenu] = useState(false);
-    const [provanance, setProvanance] = useState(false);
-    const [owner, setOwner] = useState(false);
     const [user, setUser] = useState();
     const [showOfferInput, setShowOfferInput] = useState(false);
     const [offerPrice, setOfferPrice] = useState(0);
     const [offers, setOffers] = useState();
+    const time = Math.floor(new Date().getTime() / 1000);
 
     useEffect(() => {
         const addNFT = async (sanityClient = client) => {
@@ -90,7 +88,9 @@ const NFTDescription = ({ listing }) => {
                 console.log(err);
             }
 
-            const offers = await marketplace.offers.getAll();
+            const offers = await marketplace.offers.getAll({
+                id: listing
+            });
             console.log(offers);
             setOffers(offers);
         }
@@ -128,21 +128,6 @@ const NFTDescription = ({ listing }) => {
         setShowOfferInput(false);
     }
 
-    const provananceArray = [
-        images.user6,
-        images.user7,
-        images.user8,
-        images.user9,
-        images.user10,
-    ];
-    const ownerArray = [
-        images.user1,
-        images.user8,
-        images.user2,
-        images.user6,
-        images.user5,
-    ];
-
     const openSocial = () => {
         if (!social) {
             setSocial(true);
@@ -161,30 +146,12 @@ const NFTDescription = ({ listing }) => {
         }
     };
 
-    const openTabs = (e) => {
-        if (!provanance) {
-            setProvanance(true);
-            setOwner(false);
-        } else {
-            setProvanance(false);
-        }
-    };
-
-    const openOwmer = () => {
-        if (!owner) {
-            setOwner(true);
-            setProvanance(false);
-        } else {
-            setOwner(false);
-        }
-    };
-
     return (
         <div className={Style.NFTDescription}>
             <div className={Style.NFTDescription_box}>
                 {/* //Part ONE */}
                 <div className={Style.NFTDescription_box_share}>
-                    <p>Virtual Worlds</p>
+                    <p></p>
                     <div className={Style.NFTDescription_box_share_box}>
                         <MdCloudUpload
                             className={Style.NFTDescription_box_share_box_icon}
@@ -266,7 +233,7 @@ const NFTDescription = ({ listing }) => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>{Math.floor(listing.endTimeInSeconds / 86400)}</p>
+                                <p>{Math.floor((listing.endTimeInSeconds - time) / 86400)}</p>
                                 <span>Days</span>
                             </div>
                             <div
@@ -274,7 +241,7 @@ const NFTDescription = ({ listing }) => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>{Math.floor((listing.endTimeInSeconds % 86400) / 3600)}</p>
+                                <p>{Math.floor(((listing.endTimeInSeconds - time) % 86400) / 3600)}</p>
                                 <span>hours</span>
                             </div>
                             <div
@@ -282,7 +249,7 @@ const NFTDescription = ({ listing }) => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>{Math.floor(((listing.endTimeInSeconds % 86400) % 3600) / 60)}</p>
+                                <p>{Math.floor((((listing.endTimeInSeconds - time) % 86400) % 3600) / 60)}</p>
                                 <span>mins</span>
                             </div>
                             <div
@@ -290,7 +257,7 @@ const NFTDescription = ({ listing }) => {
                                     Style.NFTDescription_box_profile_biding_box_timer_item
                                 }
                             >
-                                <p>{((listing.endTimeInSeconds % 86400) % 3600) % 60}</p>
+                                <p>{(((listing.endTimeInSeconds - time) % 86400) % 3600) % 60}</p>
                                 <span>secs</span>
                             </div>
                         </div>
@@ -308,7 +275,7 @@ const NFTDescription = ({ listing }) => {
                             </div>
                         </div>
 
-                        {listing.status == 2 ? (
+                        {listing.status != 4 ? (
                             <div className={Style.NFTDescription_box_profile_biding_box_button}>
                                 <Button
                                     icon=<FaPercentage />
@@ -319,6 +286,7 @@ const NFTDescription = ({ listing }) => {
                         ) : listing.creatorAddress != address ? (
                             <div className={Style.NFTDescription_box_profile_biding_box_button}>
                                 <Web3Button
+                                    theme={'light'}
                                     contractAddress={MARKETPLACE_ADDR}
                                     action={
                                         async () => buyListing()
@@ -350,6 +318,7 @@ const NFTDescription = ({ listing }) => {
                                                     action={
                                                         async () => offerListing()
                                                     }
+                                                    theme={'light'}
                                                 >
                                                     Submit Offer
                                                 </Web3Button>
@@ -392,23 +361,6 @@ const NFTDescription = ({ listing }) => {
                                         Cancel Listing
                                     </Web3Button>
                                 </div>
-                            </div>
-                        )}
-
-                        <div className={Style.NFTDescription_box_profile_biding_box_tabs}>
-                            <button onClick={(e) => openTabs(e)}>Provanance</button>
-                            <button onClick={() => openOwmer()}>Owner</button>
-                        </div>
-
-                        {provanance && (
-                            <div className={Style.NFTDescription_box_profile_biding_box_card}>
-                                <NFTTabs dataTab={provananceArray} />
-                            </div>
-                        )}
-
-                        {owner && (
-                            <div className={Style.NFTDescription_box_profile_biding_box_card}>
-                                <NFTTabs dataTab={ownerArray} icon=<MdVerified /> />
                             </div>
                         )}
                     </div>

@@ -6,8 +6,11 @@ import images from "../img";
 import { useAddress } from "@thirdweb-dev/react";
 import { client } from "../sanityClient";
 import { Button } from "../components/componentsindex";
+import { useRouter } from "next/router";
 
 const account = () => {
+    const router = useRouter();
+
     const [user, setUser] = useState();
     const [username, setUsername] = useState('');
     const [description, setDescription] = useState('');
@@ -46,6 +49,7 @@ const account = () => {
 
             if (res) {
                 console.log("update successfully");
+                router.push("/");
             }
         } catch (err) {
             console.log(err);

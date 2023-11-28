@@ -63,16 +63,6 @@ const author = () => {
                 follower={follower}
                 following={following}
             />
-            <Title
-                heading="Popular Creators"
-                paragraph="Click on music icon and enjoy NTF music or audio
-"
-            />
-            <div className={Style.author_box}>
-                {followerArray.map((el, i) => (
-                    <FollowerTabCard i={i} el={el} />
-                ))}
-            </div>
         </div>
     );
 };

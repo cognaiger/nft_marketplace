@@ -21,7 +21,7 @@ const CollectionID = () => {
         <div className={Style.collection}>
             <Banner bannerImage={images.creatorbackground1} />
             <CollectionProfile address={router.query.collectionId} />
-            <NFTCardTwo NFTData={collectionArray} />
+            <NFTCardTwo NFTData={collectionArray} address={router.query.collectionId} />
         </div>
     );
 };
